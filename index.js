@@ -14,7 +14,6 @@ const { Server } = require('socket.io');
 // --- APP & SERVER SETUP ---
 const app = express();
 
-const server = http.createServer(app);
 // ✨ THE FIX: Define parsedPort at the top level
 const parsedPort = parseInt(process.env.PORT || '8000', 10);
 if (isNaN(parsedPort) || parsedPort < 0 || parsedPort > 65535) {

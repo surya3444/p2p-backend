@@ -14,7 +14,7 @@ const { Server } = require('socket.io');
 // --- APP & SERVER SETUP ---
 const app = express();
 
-    onst whitelist = ['http://localhost:5173', 'http://localhost:4173', 'https://p2p-cloud-server.vercel.app']; 
+    const whitelist = ['http://localhost:5173', 'http://localhost:4173', 'https://p2p-cloud-server.vercel.app']; 
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {

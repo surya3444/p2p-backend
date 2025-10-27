@@ -42,10 +42,7 @@ app.get('/health', (req, res) => {
 const server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
 
-// --- DATABASE CONNECTION ---
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB connected successfully.'))
-    .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
 
 // --- USER SCHEMA ---
@@ -223,3 +220,18 @@ server.listen(PORT, () => {
     console.log(`🚀 Server is live on port ${PORT}`);
     console.log('PeerJS server is running at /myapp');
 });
+
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('✅ MongoDB connected successfully.');
+    // Now that the database is ready, we can start listening for traffic.
+    server.listen(parsedPort, '0.0.0.0', () => {
+        console.log(`🚀 Server is live on port ${parsedPort}`);
+        console.log('PeerJS server is running at /myapp');
+    });
+  })
+  .catch(err => {
+    console.error('❌ MongoDB initial connection error. Server not started.', err);
+    process.exit(1);
+  });

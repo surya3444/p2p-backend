@@ -30,14 +30,28 @@ app.use(cors(corsOptions));
 
 
 app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 const server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
 
 // --- DATABASE CONNECTION ---
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB connected successfully.'))
-    .catch(err => console.error('❌ MongoDB connection error:', err));
-
+// --- LAZY DATABASE CONNECTION ---
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) {
+    return; // Already connected
+  }
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('✅ MongoDB connected on-demand.');
+  } catch (err) {
+    console.error('❌ MongoDB on-demand connection error:', err);
+    process.exit(1); // Exit if DB connection fails
+  }
+};
 // --- USER SCHEMA ---
 const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },

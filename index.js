@@ -26,8 +26,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-// ✨ THE DEFINITIVE FIX: Explicitly handle all preflight 'OPTIONS' requests
-app.options('*', cors(corsOptions));
+
 
 app.use(express.json());
 const server = http.createServer(app);

@@ -14,6 +14,14 @@ const { Server } = require('socket.io');
 // --- APP & SERVER SETUP ---
 const app = express();
 
+const server = http.createServer(app);
+// ✨ THE FIX: Define parsedPort at the top level
+const parsedPort = parseInt(process.env.PORT || '8000', 10);
+if (isNaN(parsedPort) || parsedPort < 0 || parsedPort > 65535) {
+    console.error(`❌ Invalid PORT detected: '${process.env.PORT}'. Exiting.`);
+    process.exit(1);
+}
+
  const whitelist = ['http://localhost:5173', 'http://localhost:4173', 'https://p2p-cloud-server.vercel.app']; 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -215,11 +223,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// --- START THE SERVER ---
-server.listen(PORT, () => {
-    console.log(`🚀 Server is live on port ${PORT}`);
-    console.log('PeerJS server is running at /myapp');
-});
 
 
 mongoose.connect(process.env.MONGO_URI)

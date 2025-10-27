@@ -14,10 +14,18 @@ const { Server } = require('socket.io');
 // --- APP & SERVER SETUP ---
 const app = express();
 
-    const corsOptions = {
-      origin: 'https://p2p-cloud-server.vercel.app', // Replace with your actual frontend domain
-      credentials: true, // If you need to send cookies or authentication headers
-    };
+    onst whitelist = ['http://localhost:5173', 'http://localhost:4173', 'https://p2p-cloud-server.vercel.app']; 
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+};
 app.use(cors(corsOptions));
 
 

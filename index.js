@@ -14,19 +14,30 @@ const { Server } = require('socket.io');
 // --- APP & SERVER SETUP ---
 const app = express();
 
-    const whitelist = ['http://localhost:5173', 'http://localhost:4173', 'https://p2p-cloud-server.vercel.app']; 
+  const allowedOrigins = ['https://p2p-cloud-server.vercel.app', 'http://localhost:3000'];
+
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true,
+origin: (origin, callback) => {
+// Allow requests with no origin (like mobile apps or curl requests)
+if (!origin) return callback(null, true);
+
+if (allowedOrigins.includes(origin)) {
+  callback(null, true); // Origin is allowed
+} else {
+  callback(new Error('Not allowed by CORS')); // Origin is not allowed
+}
+},
+methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific methods
+allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+credentials: true, // Include credentials (optional)
+optionsSuccessStatus: 204, // For legacy browser support
 };
+
+// Enable CORS with the specified options
 app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
 
 
 app.use(express.json());

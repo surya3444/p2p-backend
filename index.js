@@ -37,7 +37,7 @@ optionsSuccessStatus: 204, // For legacy browser support
 app.use(cors(corsOptions));
 
 // Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
+
 
 
 app.use(express.json());

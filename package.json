@@ -1,8 +1,8 @@
 {
   "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "node auth_server.js",
-  "dev": "nodemon auth_server.js"
+  "start": "node index.js",
+  "dev": "nodemon index.js"
 },
 
   "dependencies": {
